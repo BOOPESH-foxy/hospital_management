@@ -19,14 +19,10 @@ class startPage():
         self.hmdb = db
         
     def check_credentials(self,username,password):
-        selectQuery = "select * from authentication where "
-        hmcursor.execute(selectQuery)
-        if (username.casefold() == user and password == passw):
-            print("logged in ....")
-            return 1
-        else:
-            return 0
-    
+        selectQuery = "select isadmin from authentication where username like %s and password like %s"
+        data = (username,password)
+        print(self.hmcursor.execute(selectQuery,data))
+        
     def credential_prompt(self):
         Case = int(input("[1] : Login \n[2] : signUp\nEnter[1/2] : "))
         if (Case == 1):
