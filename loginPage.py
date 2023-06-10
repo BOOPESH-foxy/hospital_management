@@ -1,5 +1,8 @@
 from os import system, name
 import time
+import psycopg2
+import pwinput
+
 
 class User():
     def __init__(self,userName,isAdmin,hospital_id=None,slotId=None,date=None) -> None:
@@ -16,6 +19,8 @@ class startPage():
         self.hmdb = db
         
     def check_credentials(self,username,password):
+        selectQuery = "select * from authentication where "
+        hmcursor.execute(selectQuery)
         if (username.casefold() == user and password == passw):
             print("logged in ....")
             return 1
@@ -25,8 +30,8 @@ class startPage():
     def credential_prompt(self):
         Case = int(input("[1] : Login \n[2] : signUp\nEnter[1/2] : "))
         if (Case == 1):
-            username = input("UserName : ")
-            password = input("PassWord : ")
+            username = str(input("UserName : "))
+            password = pwinput.pwinput(prompt="PassWord : ",mask="*")
             result = self.check_credentials(username, password)
             return result
         
@@ -44,6 +49,15 @@ class startPage():
             else:
                 pass
             
-# if __name__  == "__main__":
-#     ClassObject = startPage()
-#     ClassObject.login_page()
+if __name__  == "__main__":
+
+    hmDb = psycopg2.connect(
+        database = "hospital_management",
+        user = "postgres",
+        password = "new_password",
+        host = "127.0.0.1",
+        port = "5432"
+    )
+    hmcursor = hmDb.cursor()
+    ClassObject = startPage(hmcursor,hmDb)
+    ClassObject.login_page()
