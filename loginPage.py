@@ -11,7 +11,6 @@ class User():
         self.hospitalId = hospital_id
         self.vaccinatedDate = date
         
-
 class startPage():
     def __init__(self,dbCursor,db):
         self.hmcursor = dbCursor
@@ -30,6 +29,7 @@ class startPage():
         
     def inserInto(self,name,password):
         self.hmcursor.execute("insert into authentication(username,password,isadmin) values(%s,%s,{0})".format(False),(name,password))
+        print("signed up successfully")
         self.hmdb.commit()
         
     def credential_prompt(self):
@@ -42,13 +42,13 @@ class startPage():
             return result
         if (Case == 2):
             system('clear')
-            name = input("Enter username: :")
+            name = input("Enter username: ")
             password = pwinput.pwinput(prompt="Password : ",mask="*")
             ReEntered = pwinput.pwinput(prompt="Re-enter new password : ",mask="*")
             if (password == ReEntered):
                 self.inserInto(name, password)
-                print("signed up successfully")
                 system('clear')
+                time.sleep(1)
                 choise = input("wanna get home ? [y/n] :")
                 if choise in ['y' or 'Y']:
                     self.credential_prompt()
@@ -65,7 +65,6 @@ class startPage():
                 exit()
             self.credential_prompt()
 
-        
     def login_page(self):
             status = self.credential_prompt()
             print("status :",status)
